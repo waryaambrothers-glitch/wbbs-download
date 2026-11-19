@@ -327,8 +327,8 @@
         WhatsApp par Order Karein
       </a>
 
-      <!-- Live ginti — API se numbers aane par hi dikhti hai, warna chhupi rehti hai -->
-      <div class="counter" id="counterBox" hidden aria-label="Live ginti">
+      <!-- Live ginti — dukandaron se chhupi hui. Sirf owner ko dikhti hai jab link ke akhir mein ?owner=1 ho. Ginti peeche har visit/download/order par chalti rehti hai. -->
+      <div class="counter" id="counterBox" hidden aria-label="Live ginti — sirf owner ke liye">
         <div class="stat"><div class="n" id="cntVisits">–</div><div class="l">logon ne page khola</div></div>
         <div class="stat"><div class="n" id="cntDownloads">–</div><div class="l">downloads</div></div>
         <div class="stat"><div class="n" id="cntOrders">–</div><div class="l">logon ne order ke liye rabta kiya</div></div>
@@ -573,8 +573,12 @@
     if(!isFinite(n) || n < 0) return null;
     return n.toLocaleString("en-US");
   }
+  // Sirf owner ko dikhao: link mein ?owner=1 (ya ?stats=1) ho to hi counter nazar aaye ga.
+  // Dukandar wale aam link par counter hamesha chhupa rahe ga — ginti phir bhi hoti rahe gi.
+  var isOwnerView = (params.get("owner") === "1" || params.get("stats") === "1" || params.get("show") === "stats");
   function renderCounts(){
     if(!counts) return;
+    if(!isOwnerView){ counterBox.hidden = true; return; }
     var v = fmt(counts.visits), d = fmt(counts.downloads), o = fmt(counts.orders);
     if(v === null || d === null || o === null){ counterBox.hidden = true; return; }
     cntVisits.textContent = v;
